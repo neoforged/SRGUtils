@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.srgutils;
+package net.neoforged.srgutils;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -22,12 +22,6 @@ import java.util.regex.Matcher;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
-
-import net.minecraftforge.srgutils.IMappingFile.Format;
-
-import static net.minecraftforge.srgutils.IMappingFile.Format.*;
-import static net.minecraftforge.srgutils.InternalUtils.Element.*;
-import static net.minecraftforge.srgutils.InternalUtils.*;
 
 class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
     private final List<String> names;
@@ -65,7 +59,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
     }
 
     @Override
-    public void write(Path path, Format format, String... order) throws IOException {
+    public void write(Path path, IMappingFile.Format format, String... order) throws IOException {
         if (order == null || order.length == 1)
             throw new IllegalArgumentException("Invalid order, you must specify atleast 2 names");
 
@@ -85,24 +79,24 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
 
         getPackages().sorted(sort).forEachOrdered(pkg -> {
             lines.add(pkg.write(format, indexes));
-            writeMeta(format, lines, PACKAGE, pkg.meta);
+            InternalUtils.writeMeta(format, lines, InternalUtils.Element.PACKAGE, pkg.meta);
         });
         getClasses().sorted(sort).forEachOrdered(cls -> {
             lines.add(cls.write(format, indexes));
-            writeMeta(format, lines, CLASS, cls.meta);
+            InternalUtils.writeMeta(format, lines, InternalUtils.Element.CLASS, cls.meta);
 
             cls.getFields().sorted(sort).forEachOrdered(fld -> {
                 lines.add(fld.write(format, indexes));
-                writeMeta(format, lines, FIELD, fld.meta);
+                InternalUtils.writeMeta(format, lines, InternalUtils.Element.FIELD, fld.meta);
             });
 
             cls.getMethods().sorted(sort).forEachOrdered(mtd -> {
                 lines.add(mtd.write(format, indexes));
-                writeMeta(format, lines, METHOD, mtd.meta);
+                InternalUtils.writeMeta(format, lines, InternalUtils.Element.METHOD, mtd.meta);
 
                 mtd.getParameters().sorted((a,b) -> a.getIndex() - b.getIndex()).forEachOrdered(par -> {
                     lines.add(par.write(format, indexes));
-                    writeMeta(format, lines, PARAMETER, par.meta);
+                    InternalUtils.writeMeta(format, lines, InternalUtils.Element.PARAMETER, par.meta);
                 });
             });
         });
@@ -110,17 +104,17 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
         lines.removeIf(e -> e == null);
 
         if (!format.isOrdered()) {
-            Comparator<String> linesort = (format == SRG || format == XSRG) ? InternalUtils::compareLines : (o1, o2) -> o1.compareTo(o2);
+            Comparator<String> linesort = (format == IMappingFile.Format.SRG || format == IMappingFile.Format.XSRG) ? InternalUtils::compareLines : (o1, o2) -> o1.compareTo(o2);
             Collections.sort(lines, linesort);
         }
 
-        if (format == TINY1 || format == TINY) {
+        if (format == IMappingFile.Format.TINY1 || format == IMappingFile.Format.TINY) {
             StringBuilder buf = new StringBuilder();
-            buf.append(format == TINY ? "tiny\t2\t0" : "v1");
+            buf.append(format == IMappingFile.Format.TINY ? "tiny\t2\t0" : "v1");
             for (String name : order)
                 buf.append('\t').append(name);
             lines.add(0, buf.toString());
-        } else if (format == TSRG2) {
+        } else if (format == IMappingFile.Format.TSRG2) {
             StringBuilder buf = new StringBuilder();
             buf.append("tsrg2");
             for (String name : order)
@@ -231,7 +225,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
             return ret.toString();
         }
 
-        abstract String write(Format format, int... order);
+        abstract String write(IMappingFile.Format format, int... order);
     }
 
     class Package extends Named implements IMappingBuilder.IPackage {
@@ -242,7 +236,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
         }
 
         @Override
-        String write(Format format, int... order) {
+        String write(IMappingFile.Format format, int... order) {
             switch (format) {
                 case SRG:
                 case XSRG: return "PK: " + getName(order[0]) + ' ' + getName(order[1]);
@@ -319,7 +313,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
         }
 
         @Override
-        String write(Format format, int... order) {
+        String write(IMappingFile.Format format, int... order) {
             switch (format) {
                 case SRG:
                 case XSRG:  return "CL: " + getName(order[0]) + ' ' + getName(order[1]);
@@ -374,7 +368,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
             }
 
             @Override
-            String write(Format format, int... order) {
+            String write(IMappingFile.Format format, int... order) {
                 switch (format) {
                     case SRG:   return "FD: " + Cls.this.getName(order[0]) + '/' + getName(order[0]) + ' ' + Cls.this.getName(order[1]) + '/' + getName(order[1]) + (this.desc == null ? "" : getDescriptor(order[0]) + ' ' + getDescriptor(order[1]));
                     case XSRG:  return "FD: " + Cls.this.getName(order[0]) + '/' + getName(order[0]) + (this.desc == null ? "" : getDescriptor(order[0])) + ' ' + Cls.this.getName(order[1]) + '/' + getName(order[1]) + (this.desc == null ? "" : getDescriptor(order[1]));
@@ -437,7 +431,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
             }
 
             @Override
-            String write(Format format, int... order) {
+            String write(IMappingFile.Format format, int... order) {
                 String oOwner = Cls.this.getName(order[0]);
                 String oName = getName(order[0]);
                 String mName = getName(order[1]);
@@ -485,7 +479,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
                 }
 
                 @Override
-                String write(Format format, int... order) {
+                String write(IMappingFile.Format format, int... order) {
                     switch (format) {
                         case SRG:
                         case XSRG:

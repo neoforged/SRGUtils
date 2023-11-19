@@ -1656,36 +1656,36 @@ joptsimple.util.KeyValuePair -> cZ:
     boolean equals(java.lang.Object) -> equals
     int hashCode() -> hashCode
     java.lang.String toString() -> toString
-net.minecraftforge.installer.DownloadUtils -> da:
+net.neoforged.installer.DownloadUtils -> da:
     boolean OFFLINE_MODE -> a
     void <init>() -> <init>
-    boolean downloadLibrary(net.minecraftforge.installer.actions.ProgressCallback,net.minecraftforge.installer.json.Mirror,net.minecraftforge.installer.json.Version$Library,java.io.File,java.util.function.Predicate,java.util.List) -> a
-    boolean download(net.minecraftforge.installer.actions.ProgressCallback,net.minecraftforge.installer.json.Mirror,net.minecraftforge.installer.json.Version$LibraryDownload,java.io.File) -> a
-    boolean download(net.minecraftforge.installer.actions.ProgressCallback,net.minecraftforge.installer.json.Mirror,net.minecraftforge.installer.json.Version$Download,java.io.File) -> a
-    boolean download(net.minecraftforge.installer.actions.ProgressCallback,net.minecraftforge.installer.json.Mirror,net.minecraftforge.installer.json.Version$Download,java.io.File,java.lang.String) -> a
+    boolean downloadLibrary(net.neoforged.installer.actions.ProgressCallback,net.neoforged.installer.json.Mirror,net.neoforged.installer.json.Version$Library,java.io.File,java.util.function.Predicate,java.util.List) -> a
+    boolean download(net.neoforged.installer.actions.ProgressCallback,net.neoforged.installer.json.Mirror,net.neoforged.installer.json.Version$LibraryDownload,java.io.File) -> a
+    boolean download(net.neoforged.installer.actions.ProgressCallback,net.neoforged.installer.json.Mirror,net.neoforged.installer.json.Version$Download,java.io.File) -> a
+    boolean download(net.neoforged.installer.actions.ProgressCallback,net.neoforged.installer.json.Mirror,net.neoforged.installer.json.Version$Download,java.io.File,java.lang.String) -> a
     java.lang.String getSha1(java.io.File) -> a
     boolean checksumValid(java.io.File,java.lang.String) -> b
     java.net.URLConnection getConnection(java.lang.String) -> a
-    net.minecraftforge.installer.json.Mirror[] downloadMirrors(java.lang.String) -> a
-    net.minecraftforge.installer.json.Manifest downloadManifest() -> a
+    net.neoforged.installer.json.Mirror[] downloadMirrors(java.lang.String) -> a
+    net.neoforged.installer.json.Manifest downloadManifest() -> a
     boolean downloadFile(java.io.File,java.lang.String) -> a
-    boolean extractFile(net.minecraftforge.installer.json.Artifact,java.io.File,java.lang.String) -> a
+    boolean extractFile(net.neoforged.installer.json.Artifact,java.io.File,java.lang.String) -> a
     boolean extractFile(java.lang.String,java.io.File) -> a
     void $closeResource(java.lang.Throwable,java.lang.AutoCloseable) -> a
     void <clinit>() -> <clinit>
-net.minecraftforge.installer.HashFunction -> db:
-    net.minecraftforge.installer.HashFunction MD5 -> a
-    net.minecraftforge.installer.HashFunction SHA1 -> b
-    net.minecraftforge.installer.HashFunction SHA256 -> c
+net.neoforged.installer.HashFunction -> db:
+    net.neoforged.installer.HashFunction MD5 -> a
+    net.neoforged.installer.HashFunction SHA1 -> b
+    net.neoforged.installer.HashFunction SHA256 -> c
     java.lang.String algo -> a
     java.lang.String pad -> b
-    net.minecraftforge.installer.HashFunction[] $VALUES -> a
+    net.neoforged.installer.HashFunction[] $VALUES -> a
     void <init>(java.lang.String,int,java.lang.String,int) -> <init>
     java.security.MessageDigest get() -> a
     java.lang.String hash(byte[]) -> a
     java.lang.String pad(java.lang.String) -> a
     void <clinit>() -> <clinit>
-net.minecraftforge.installer.InstallerPanel -> dc:
+net.neoforged.installer.InstallerPanel -> dc:
     java.io.File targetDir -> a
     javax.swing.ButtonGroup choiceButtonGroup -> a
     javax.swing.JTextField selectedDirText -> a
@@ -1695,76 +1695,76 @@ net.minecraftforge.installer.InstallerPanel -> dc:
     javax.swing.JPanel sponsorPanel -> a
     javax.swing.JPanel fileEntryPanel -> b
     java.util.List optionals -> a
-    net.minecraftforge.installer.json.Install profile -> a
+    net.neoforged.installer.json.Install profile -> a
     java.util.Map actions -> a
     byte[] hexToByteArray(java.lang.String) -> a
     java.awt.image.BufferedImage getImage(java.lang.String,java.lang.String) -> a
-    void <init>(java.io.File,net.minecraftforge.installer.json.Install) -> <init>
+    void <init>(java.io.File,net.neoforged.installer.json.Install) -> <init>
     void updateFilePath() -> a
-    void run(net.minecraftforge.installer.actions.ProgressCallback) -> a
+    void run(net.neoforged.installer.actions.ProgressCallback) -> a
     void openURL(java.lang.String) -> a
     boolean lambda$run$3(java.lang.String) -> a
-    boolean lambda$run$2(java.lang.String,net.minecraftforge.installer.InstallerPanel$OptionalListEntry) -> a
-    net.minecraftforge.installer.actions.Action lambda$new$1(net.minecraftforge.installer.actions.Actions,net.minecraftforge.installer.json.Install,net.minecraftforge.installer.actions.ProgressCallback) -> a
+    boolean lambda$run$2(java.lang.String,net.neoforged.installer.InstallerPanel$OptionalListEntry) -> a
+    net.neoforged.installer.actions.Action lambda$new$1(net.neoforged.installer.actions.Actions,net.neoforged.installer.json.Install,net.neoforged.installer.actions.ProgressCallback) -> a
     void lambda$new$0(java.awt.event.ActionEvent) -> a
-    java.io.File access$000(net.minecraftforge.installer.InstallerPanel) -> a
-    java.io.File access$002(net.minecraftforge.installer.InstallerPanel,java.io.File) -> a
-    void access$100(net.minecraftforge.installer.InstallerPanel) -> a
-    javax.swing.JDialog access$400(net.minecraftforge.installer.InstallerPanel) -> a
-net.minecraftforge.installer.InstallerPanel$1 -> dd:
-    net.minecraftforge.installer.InstallerPanel this$0 -> a
-    void <init>(net.minecraftforge.installer.InstallerPanel) -> <init>
+    java.io.File access$000(net.neoforged.installer.InstallerPanel) -> a
+    java.io.File access$002(net.neoforged.installer.InstallerPanel,java.io.File) -> a
+    void access$100(net.neoforged.installer.InstallerPanel) -> a
+    javax.swing.JDialog access$400(net.neoforged.installer.InstallerPanel) -> a
+net.neoforged.installer.InstallerPanel$1 -> dd:
+    net.neoforged.installer.InstallerPanel this$0 -> a
+    void <init>(net.neoforged.installer.InstallerPanel) -> <init>
     void run() -> run
-net.minecraftforge.installer.InstallerPanel$FileSelectAction -> de:
-    net.minecraftforge.installer.InstallerPanel this$0 -> a
-    void <init>(net.minecraftforge.installer.InstallerPanel) -> <init>
+net.neoforged.installer.InstallerPanel$FileSelectAction -> de:
+    net.neoforged.installer.InstallerPanel this$0 -> a
+    void <init>(net.neoforged.installer.InstallerPanel) -> <init>
     void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
-    void <init>(net.minecraftforge.installer.InstallerPanel,net.minecraftforge.installer.InstallerPanel$1) -> <init>
-net.minecraftforge.installer.InstallerPanel$OptionalListEntry -> df:
-    net.minecraftforge.installer.json.OptionalLibrary lib -> a
+    void <init>(net.neoforged.installer.InstallerPanel,net.neoforged.installer.InstallerPanel$1) -> <init>
+net.neoforged.installer.InstallerPanel$OptionalListEntry -> df:
+    net.neoforged.installer.json.OptionalLibrary lib -> a
     boolean enabled -> a
     boolean isEnabled() -> a
-net.minecraftforge.installer.InstallerPanel$SelectButtonAction -> dg:
-    net.minecraftforge.installer.InstallerPanel this$0 -> a
-    void <init>(net.minecraftforge.installer.InstallerPanel) -> <init>
+net.neoforged.installer.InstallerPanel$SelectButtonAction -> dg:
+    net.neoforged.installer.InstallerPanel this$0 -> a
+    void <init>(net.neoforged.installer.InstallerPanel) -> <init>
     void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
-    void <init>(net.minecraftforge.installer.InstallerPanel,net.minecraftforge.installer.InstallerPanel$1) -> <init>
-net.minecraftforge.installer.ProgressFrame -> dh:
-    net.minecraftforge.installer.actions.ProgressCallback parent -> b
+    void <init>(net.neoforged.installer.InstallerPanel,net.neoforged.installer.InstallerPanel$1) -> <init>
+net.neoforged.installer.ProgressFrame -> dh:
+    net.neoforged.installer.actions.ProgressCallback parent -> b
     javax.swing.JPanel panel -> a
     javax.swing.JLabel progressText -> a
     javax.swing.JProgressBar progressBar -> a
     javax.swing.JTextArea consoleArea -> a
-    void <init>(net.minecraftforge.installer.actions.ProgressCallback,java.lang.String,java.lang.Runnable) -> <init>
+    void <init>(net.neoforged.installer.actions.ProgressCallback,java.lang.String,java.lang.Runnable) -> <init>
     void start(java.lang.String) -> a
     void progress(double) -> a
     void stage(java.lang.String) -> b
-    void message(java.lang.String,net.minecraftforge.installer.actions.ProgressCallback$MessagePriority) -> a
+    void message(java.lang.String,net.neoforged.installer.actions.ProgressCallback$MessagePriority) -> a
     void lambda$new$0(java.lang.Runnable,java.awt.event.ActionEvent) -> a
-net.minecraftforge.installer.SimpleInstaller -> net.minecraftforge.installer.SimpleInstaller:
+net.neoforged.installer.SimpleInstaller -> net.neoforged.installer.SimpleInstaller:
     boolean headless -> a
     void <init>() -> <init>
     void main(java.lang.String[]) -> main
     java.io.File getMCDir() -> a
-    void launchGui(net.minecraftforge.installer.actions.ProgressCallback) -> b
+    void launchGui(net.neoforged.installer.actions.ProgressCallback) -> b
     java.io.OutputStream getLog() -> a
-    void hookStdOut(net.minecraftforge.installer.actions.ProgressCallback) -> a
+    void hookStdOut(net.neoforged.installer.actions.ProgressCallback) -> a
     boolean lambda$main$0(java.lang.String) -> a
     void <clinit>() -> <clinit>
-net.minecraftforge.installer.SimpleInstaller$1 -> di:
+net.neoforged.installer.SimpleInstaller$1 -> di:
     java.util.regex.Pattern val$endingWhitespace -> a
-    net.minecraftforge.installer.actions.ProgressCallback val$monitor -> a
-    void <init>(java.util.regex.Pattern,net.minecraftforge.installer.actions.ProgressCallback) -> <init>
+    net.neoforged.installer.actions.ProgressCallback val$monitor -> a
+    void <init>(java.util.regex.Pattern,net.neoforged.installer.actions.ProgressCallback) -> <init>
     void write(byte[],int,int) -> write
     void write(byte[]) -> write
     void write(int) -> write
-net.minecraftforge.installer.actions.Action -> dj:
-    net.minecraftforge.installer.json.Install profile -> a
-    net.minecraftforge.installer.actions.ProgressCallback monitor -> a
-    net.minecraftforge.installer.actions.PostProcessors processors -> a
-    net.minecraftforge.installer.json.Version version -> a
+net.neoforged.installer.actions.Action -> dj:
+    net.neoforged.installer.json.Install profile -> a
+    net.neoforged.installer.actions.ProgressCallback monitor -> a
+    net.neoforged.installer.actions.PostProcessors processors -> a
+    net.neoforged.installer.json.Version version -> a
     java.util.List grabbed -> a
-    void <init>(net.minecraftforge.installer.json.Install,net.minecraftforge.installer.actions.ProgressCallback,boolean) -> <init>
+    void <init>(net.neoforged.installer.json.Install,net.neoforged.installer.actions.ProgressCallback,boolean) -> <init>
     void error(java.lang.String) -> a
     boolean run(java.io.File,java.util.function.Predicate) -> a
     boolean isPathValid(java.io.File) -> a
@@ -1774,89 +1774,89 @@ net.minecraftforge.installer.actions.Action -> dj:
     boolean downloadLibraries(java.io.File,java.util.function.Predicate) -> b
     int downlaodedCount() -> a
     void checkCancel() -> a
-net.minecraftforge.installer.actions.ActionCanceledException -> dk:
+net.neoforged.installer.actions.ActionCanceledException -> dk:
     void <init>(java.lang.Exception) -> <init>
-net.minecraftforge.installer.actions.Actions -> dl:
-    net.minecraftforge.installer.actions.Actions CLIENT -> a
-    net.minecraftforge.installer.actions.Actions SERVER -> b
-    net.minecraftforge.installer.actions.Actions EXTRACT -> c
+net.neoforged.installer.actions.Actions -> dl:
+    net.neoforged.installer.actions.Actions CLIENT -> a
+    net.neoforged.installer.actions.Actions SERVER -> b
+    net.neoforged.installer.actions.Actions EXTRACT -> c
     java.lang.String label -> a
     java.lang.String tooltip -> b
     java.util.function.BiFunction action -> a
     java.util.function.Function success -> a
-    net.minecraftforge.installer.actions.Actions[] $VALUES -> a
-    net.minecraftforge.installer.actions.Actions[] values() -> a
+    net.neoforged.installer.actions.Actions[] $VALUES -> a
+    net.neoforged.installer.actions.Actions[] values() -> a
     void <init>(java.lang.String,int,java.lang.String,java.lang.String,java.util.function.BiFunction,java.util.function.Function) -> <init>
     java.lang.String getButtonLabel() -> a
     java.lang.String getTooltip() -> b
     java.lang.String getSuccess(java.lang.String) -> a
-    net.minecraftforge.installer.actions.Action getAction(net.minecraftforge.installer.json.Install,net.minecraftforge.installer.actions.ProgressCallback) -> a
+    net.neoforged.installer.actions.Action getAction(net.neoforged.installer.json.Install,net.neoforged.installer.actions.ProgressCallback) -> a
     java.lang.String lambda$static$2(java.lang.String) -> b
     java.lang.String lambda$static$1(java.lang.String) -> c
     java.lang.String lambda$static$0(java.lang.String) -> d
     void <clinit>() -> <clinit>
-net.minecraftforge.installer.actions.ClientInstall -> dm:
-    void <init>(net.minecraftforge.installer.json.Install,net.minecraftforge.installer.actions.ProgressCallback) -> <init>
+net.neoforged.installer.actions.ClientInstall -> dm:
+    void <init>(net.neoforged.installer.json.Install,net.neoforged.installer.actions.ProgressCallback) -> <init>
     boolean run(java.io.File,java.util.function.Predicate) -> a
     boolean injectProfile(java.io.File) -> b
     boolean isPathValid(java.io.File) -> a
     java.lang.String getFileError(java.io.File) -> a
     java.lang.String getSuccessMessage() -> a
     void $closeResource(java.lang.Throwable,java.lang.AutoCloseable) -> a
-net.minecraftforge.installer.actions.ExtractAction -> dn:
-    void <init>(net.minecraftforge.installer.json.Install,net.minecraftforge.installer.actions.ProgressCallback) -> <init>
+net.neoforged.installer.actions.ExtractAction -> dn:
+    void <init>(net.neoforged.installer.json.Install,net.neoforged.installer.actions.ProgressCallback) -> <init>
     boolean run(java.io.File,java.util.function.Predicate) -> a
     boolean isPathValid(java.io.File) -> a
     java.lang.String getFileError(java.io.File) -> a
     java.lang.String getSuccessMessage() -> a
-net.minecraftforge.installer.actions.PostProcessors -> do:
-    net.minecraftforge.installer.json.Install profile -> a
+net.neoforged.installer.actions.PostProcessors -> do:
+    net.neoforged.installer.json.Install profile -> a
     boolean isClient -> a
-    net.minecraftforge.installer.actions.ProgressCallback monitor -> a
+    net.neoforged.installer.actions.ProgressCallback monitor -> a
     boolean hasTasks -> b
     java.util.Map data -> a
     java.util.List processors -> a
     boolean clChecked -> c
     java.lang.ClassLoader parentClassLoader -> a
-    void <init>(net.minecraftforge.installer.json.Install,boolean,net.minecraftforge.installer.actions.ProgressCallback) -> <init>
-    net.minecraftforge.installer.json.Version$Library[] getLibraries() -> a
+    void <init>(net.neoforged.installer.json.Install,boolean,net.neoforged.installer.actions.ProgressCallback) -> <init>
+    net.neoforged.installer.json.Version$Library[] getLibraries() -> a
     boolean process(java.io.File,java.io.File) -> a
     void error(java.lang.String) -> a
     void log(java.lang.String) -> b
     java.lang.ClassLoader getParentClassloader() -> a
     java.lang.String lambda$process$0(java.lang.String) -> a
     void <clinit>() -> <clinit>
-net.minecraftforge.installer.actions.ProgressCallback -> dp:
-    net.minecraftforge.installer.actions.ProgressCallback TO_STD_OUT -> a
+net.neoforged.installer.actions.ProgressCallback -> dp:
+    net.neoforged.installer.actions.ProgressCallback TO_STD_OUT -> a
     void start(java.lang.String) -> a
     void stage(java.lang.String) -> b
     void message(java.lang.String) -> c
-    void message(java.lang.String,net.minecraftforge.installer.actions.ProgressCallback$MessagePriority) -> a
+    void message(java.lang.String,net.neoforged.installer.actions.ProgressCallback$MessagePriority) -> a
     void progress(double) -> a
-    net.minecraftforge.installer.actions.ProgressCallback withOutputs(java.io.OutputStream[]) -> a
+    net.neoforged.installer.actions.ProgressCallback withOutputs(java.io.OutputStream[]) -> a
     void <clinit>() -> <clinit>
-net.minecraftforge.installer.actions.ProgressCallback$1 -> dq:
+net.neoforged.installer.actions.ProgressCallback$1 -> dq:
     void <init>() -> <init>
-    void message(java.lang.String,net.minecraftforge.installer.actions.ProgressCallback$MessagePriority) -> a
-net.minecraftforge.installer.actions.ProgressCallback$2 -> dr:
+    void message(java.lang.String,net.neoforged.installer.actions.ProgressCallback$MessagePriority) -> a
+net.neoforged.installer.actions.ProgressCallback$2 -> dr:
     java.io.OutputStream[] val$streams -> a
     void <init>(java.io.OutputStream[]) -> <init>
-    void message(java.lang.String,net.minecraftforge.installer.actions.ProgressCallback$MessagePriority) -> a
-net.minecraftforge.installer.actions.ProgressCallback$MessagePriority -> ds:
-    net.minecraftforge.installer.actions.ProgressCallback$MessagePriority LOW -> a
-    net.minecraftforge.installer.actions.ProgressCallback$MessagePriority NORMAL -> b
-    net.minecraftforge.installer.actions.ProgressCallback$MessagePriority HIGH -> c
-    net.minecraftforge.installer.actions.ProgressCallback$MessagePriority[] $VALUES -> a
+    void message(java.lang.String,net.neoforged.installer.actions.ProgressCallback$MessagePriority) -> a
+net.neoforged.installer.actions.ProgressCallback$MessagePriority -> ds:
+    net.neoforged.installer.actions.ProgressCallback$MessagePriority LOW -> a
+    net.neoforged.installer.actions.ProgressCallback$MessagePriority NORMAL -> b
+    net.neoforged.installer.actions.ProgressCallback$MessagePriority HIGH -> c
+    net.neoforged.installer.actions.ProgressCallback$MessagePriority[] $VALUES -> a
     void <init>(java.lang.String,int) -> <init>
     void <clinit>() -> <clinit>
-net.minecraftforge.installer.actions.ServerInstall -> dt:
+net.neoforged.installer.actions.ServerInstall -> dt:
     java.util.List grabbed -> a
-    void <init>(net.minecraftforge.installer.json.Install,net.minecraftforge.installer.actions.ProgressCallback) -> <init>
+    void <init>(net.neoforged.installer.json.Install,net.neoforged.installer.actions.ProgressCallback) -> <init>
     boolean run(java.io.File,java.util.function.Predicate) -> a
     boolean isPathValid(java.io.File) -> a
     java.lang.String getFileError(java.io.File) -> a
     java.lang.String getSuccessMessage() -> a
-net.minecraftforge.installer.json.Artifact -> du:
+net.neoforged.installer.json.Artifact -> du:
     java.lang.String domain -> a
     java.lang.String name -> b
     java.lang.String version -> c
@@ -1866,36 +1866,36 @@ net.minecraftforge.installer.json.Artifact -> du:
     java.lang.String file -> g
     java.lang.String descriptor -> h
     void <init>() -> <init>
-    net.minecraftforge.installer.json.Artifact from(java.lang.String) -> a
+    net.neoforged.installer.json.Artifact from(java.lang.String) -> a
     java.io.File getLocalPath(java.io.File) -> a
     java.lang.String getDescriptor() -> a
     java.lang.String getPath() -> b
     java.lang.String getName() -> c
     java.lang.String getFilename() -> d
     java.lang.String toString() -> toString
-net.minecraftforge.installer.json.Artifact$Adapter -> dv:
+net.neoforged.installer.json.Artifact$Adapter -> dv:
     void <init>() -> <init>
-    com.google.gson.JsonElement serialize(net.minecraftforge.installer.json.Artifact,java.lang.reflect.Type,com.google.gson.JsonSerializationContext) -> a
-    net.minecraftforge.installer.json.Artifact deserialize(com.google.gson.JsonElement,java.lang.reflect.Type,com.google.gson.JsonDeserializationContext) -> a
+    com.google.gson.JsonElement serialize(net.neoforged.installer.json.Artifact,java.lang.reflect.Type,com.google.gson.JsonSerializationContext) -> a
+    net.neoforged.installer.json.Artifact deserialize(com.google.gson.JsonElement,java.lang.reflect.Type,com.google.gson.JsonDeserializationContext) -> a
     java.lang.Object deserialize(com.google.gson.JsonElement,java.lang.reflect.Type,com.google.gson.JsonDeserializationContext) -> a
     com.google.gson.JsonElement serialize(java.lang.Object,java.lang.reflect.Type,com.google.gson.JsonSerializationContext) -> a
-net.minecraftforge.installer.json.Install -> dw:
+net.neoforged.installer.json.Install -> dw:
     int spec -> a
     java.lang.String profile -> a
     java.lang.String version -> b
     java.lang.String minecraft -> c
     java.lang.String json -> d
     java.lang.String logo -> e
-    net.minecraftforge.installer.json.Artifact path -> a
+    net.neoforged.installer.json.Artifact path -> a
     java.lang.String welcome -> f
     java.lang.String mirrorList -> g
     boolean hideClient -> a
     boolean hideServer -> b
     boolean hideExtract -> c
-    net.minecraftforge.installer.json.Version$Library[] libraries -> a
+    net.neoforged.installer.json.Version$Library[] libraries -> a
     java.util.List processors -> a
     java.util.Map data -> a
-    net.minecraftforge.installer.json.Mirror mirror -> a
+    net.neoforged.installer.json.Mirror mirror -> a
     boolean triedMirrors -> d
     void <init>() -> <init>
     int getSpec() -> a
@@ -1904,47 +1904,47 @@ net.minecraftforge.installer.json.Install -> dw:
     java.lang.String getMinecraft() -> c
     java.lang.String getJson() -> d
     java.lang.String getLogo() -> e
-    net.minecraftforge.installer.json.Artifact getPath() -> a
+    net.neoforged.installer.json.Artifact getPath() -> a
     java.lang.String getWelcome() -> f
     java.lang.String getMirrorList() -> g
-    net.minecraftforge.installer.json.Mirror getMirror() -> a
+    net.neoforged.installer.json.Mirror getMirror() -> a
     boolean hideClient() -> a
     boolean hideServer() -> b
     boolean hideExtract() -> c
-    net.minecraftforge.installer.json.Version$Library[] getLibraries() -> a
+    net.neoforged.installer.json.Version$Library[] getLibraries() -> a
     java.util.List getProcessors(java.lang.String) -> a
     java.util.Map getData(boolean) -> a
     java.lang.String lambda$getData$1(boolean,java.util.Map$Entry) -> a
-    boolean lambda$getProcessors$0(java.lang.String,net.minecraftforge.installer.json.Install$Processor) -> a
-net.minecraftforge.installer.json.Install$DataFile -> dx:
+    boolean lambda$getProcessors$0(java.lang.String,net.neoforged.installer.json.Install$Processor) -> a
+net.neoforged.installer.json.Install$DataFile -> dx:
     java.lang.String client -> a
     java.lang.String server -> b
     void <init>() -> <init>
-    java.lang.String access$000(net.minecraftforge.installer.json.Install$DataFile) -> a
-    java.lang.String access$100(net.minecraftforge.installer.json.Install$DataFile) -> b
-net.minecraftforge.installer.json.Install$Processor -> dy:
+    java.lang.String access$000(net.neoforged.installer.json.Install$DataFile) -> a
+    java.lang.String access$100(net.neoforged.installer.json.Install$DataFile) -> b
+net.neoforged.installer.json.Install$Processor -> dy:
     java.util.List sides -> a
-    net.minecraftforge.installer.json.Artifact jar -> a
-    net.minecraftforge.installer.json.Artifact[] classpath -> a
+    net.neoforged.installer.json.Artifact jar -> a
+    net.neoforged.installer.json.Artifact[] classpath -> a
     java.lang.String[] args -> a
     java.util.Map outputs -> a
     void <init>() -> <init>
     boolean isSide(java.lang.String) -> a
-    net.minecraftforge.installer.json.Artifact getJar() -> a
-    net.minecraftforge.installer.json.Artifact[] getClasspath() -> a
+    net.neoforged.installer.json.Artifact getJar() -> a
+    net.neoforged.installer.json.Artifact[] getClasspath() -> a
     java.lang.String[] getArgs() -> a
     java.util.Map getOutputs() -> a
-net.minecraftforge.installer.json.Manifest -> dz:
+net.neoforged.installer.json.Manifest -> dz:
     java.util.List versions -> a
     void <init>() -> <init>
     java.lang.String getUrl(java.lang.String) -> a
-    boolean lambda$getUrl$0(java.lang.String,net.minecraftforge.installer.json.Manifest$Info) -> a
-net.minecraftforge.installer.json.Manifest$Info -> dA:
+    boolean lambda$getUrl$0(java.lang.String,net.neoforged.installer.json.Manifest$Info) -> a
+net.neoforged.installer.json.Manifest$Info -> dA:
     java.lang.String id -> a
     java.lang.String url -> b
     java.lang.String getId() -> a
     java.lang.String getUrl() -> b
-net.minecraftforge.installer.json.Mirror -> dB:
+net.neoforged.installer.json.Mirror -> dB:
     java.lang.String name -> a
     java.lang.String image -> b
     java.lang.String homepage -> c
@@ -1957,42 +1957,42 @@ net.minecraftforge.installer.json.Mirror -> dB:
     java.lang.String getImageAddress() -> b
     java.lang.String getHomepage() -> c
     java.lang.String getUrl() -> d
-net.minecraftforge.installer.json.OptionalLibrary -> dC:
+net.neoforged.installer.json.OptionalLibrary -> dC:
     java.lang.String artifact -> a
     java.lang.String getArtifact() -> a
-net.minecraftforge.installer.json.Util -> dD:
+net.neoforged.installer.json.Util -> dD:
     com.google.gson.Gson GSON -> a
     void <init>() -> <init>
-    net.minecraftforge.installer.json.Install loadInstallProfile() -> a
-    net.minecraftforge.installer.json.Mirror[] loadMirriorList(java.io.InputStream) -> a
-    net.minecraftforge.installer.json.Manifest loadManifest(java.io.InputStream) -> a
-    net.minecraftforge.installer.json.Version loadVersion(net.minecraftforge.installer.json.Install) -> a
-    net.minecraftforge.installer.json.Version getVanillaVersion(java.lang.String,java.io.File) -> a
+    net.neoforged.installer.json.Install loadInstallProfile() -> a
+    net.neoforged.installer.json.Mirror[] loadMirriorList(java.io.InputStream) -> a
+    net.neoforged.installer.json.Manifest loadManifest(java.io.InputStream) -> a
+    net.neoforged.installer.json.Version loadVersion(net.neoforged.installer.json.Install) -> a
+    net.neoforged.installer.json.Version getVanillaVersion(java.lang.String,java.io.File) -> a
     void $closeResource(java.lang.Throwable,java.lang.AutoCloseable) -> a
     void <clinit>() -> <clinit>
-net.minecraftforge.installer.json.Version -> dE:
+net.neoforged.installer.json.Version -> dE:
     java.util.Map downloads -> a
-    net.minecraftforge.installer.json.Version$Library[] libraries -> a
+    net.neoforged.installer.json.Version$Library[] libraries -> a
     void <init>() -> <init>
-    net.minecraftforge.installer.json.Version$Download getDownload(java.lang.String) -> a
-    net.minecraftforge.installer.json.Version$Library[] getLibraries() -> a
-net.minecraftforge.installer.json.Version$Download -> dF:
+    net.neoforged.installer.json.Version$Download getDownload(java.lang.String) -> a
+    net.neoforged.installer.json.Version$Library[] getLibraries() -> a
+net.neoforged.installer.json.Version$Download -> dF:
     java.lang.String sha1 -> a
     java.lang.String url -> b
     boolean provided -> a
     void <init>() -> <init>
     java.lang.String getSha1() -> a
     java.lang.String getUrl() -> b
-net.minecraftforge.installer.json.Version$Downloads -> dG:
-    net.minecraftforge.installer.json.Version$LibraryDownload artifact -> a
-    net.minecraftforge.installer.json.Version$LibraryDownload getArtifact() -> a
-net.minecraftforge.installer.json.Version$Library -> dH:
-    net.minecraftforge.installer.json.Artifact name -> a
-    net.minecraftforge.installer.json.Version$Downloads downloads -> a
+net.neoforged.installer.json.Version$Downloads -> dG:
+    net.neoforged.installer.json.Version$LibraryDownload artifact -> a
+    net.neoforged.installer.json.Version$LibraryDownload getArtifact() -> a
+net.neoforged.installer.json.Version$Library -> dH:
+    net.neoforged.installer.json.Artifact name -> a
+    net.neoforged.installer.json.Version$Downloads downloads -> a
     void <init>() -> <init>
-    net.minecraftforge.installer.json.Artifact getName() -> a
-    net.minecraftforge.installer.json.Version$Downloads getDownloads() -> a
-net.minecraftforge.installer.json.Version$LibraryDownload -> dI:
+    net.neoforged.installer.json.Artifact getName() -> a
+    net.neoforged.installer.json.Version$Downloads getDownloads() -> a
+net.neoforged.installer.json.Version$LibraryDownload -> dI:
     java.lang.String path -> a
     void <init>() -> <init>
     java.lang.String getPath() -> c

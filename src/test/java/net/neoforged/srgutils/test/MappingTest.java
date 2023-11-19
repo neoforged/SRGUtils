@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.srgutils.test;
+package net.neoforged.srgutils.test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,9 +11,9 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
-import net.minecraftforge.srgutils.IMappingFile;
-import net.minecraftforge.srgutils.IMappingFile.Format;
-import net.minecraftforge.srgutils.INamedMappingFile;
+import net.neoforged.srgutils.IMappingFile;
+import net.neoforged.srgutils.IMappingFile.Format;
+import net.neoforged.srgutils.INamedMappingFile;
 
 import static org.junit.jupiter.api.Assertions.*;
 

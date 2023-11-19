@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.srgutils.test;
+package net.neoforged.srgutils.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import net.minecraftforge.srgutils.MinecraftVersion;
+import net.neoforged.srgutils.MinecraftVersion;
 
 public class VersionList {
 
