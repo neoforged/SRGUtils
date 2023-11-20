@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.srgutils;
+package net.neoforged.srgutils;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -21,9 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
-
-import static net.minecraftforge.srgutils.InternalUtils.Element.*;
-import static net.minecraftforge.srgutils.InternalUtils.*;
 
 class MappingFile implements IMappingFile {
     private Map<String, Package> packages = new HashMap<>();
@@ -119,24 +116,24 @@ class MappingFile implements IMappingFile {
 
         getPackages().stream().sorted(sort).forEachOrdered(pkg -> {
             lines.add(pkg.write(format, reversed));
-            writeMeta(format, lines, PACKAGE, pkg.getMetadata());
+            InternalUtils.writeMeta(format, lines, InternalUtils.Element.PACKAGE, pkg.getMetadata());
         });
         getClasses().stream().sorted(sort).forEachOrdered(cls -> {
             lines.add(cls.write(format, reversed));
-            writeMeta(format, lines, CLASS, cls.getMetadata());
+            InternalUtils.writeMeta(format, lines, InternalUtils.Element.CLASS, cls.getMetadata());
 
             cls.getFields().stream().sorted(sort).forEachOrdered(fld -> {
                 lines.add(fld.write(format, reversed));
-                writeMeta(format, lines, FIELD, fld.getMetadata());
+                InternalUtils.writeMeta(format, lines, InternalUtils.Element.FIELD, fld.getMetadata());
             });
 
             cls.getMethods().stream().sorted(sort).forEachOrdered(mtd -> {
                 lines.add(mtd.write(format, reversed));
-                writeMeta(format, lines, METHOD, mtd.getMetadata());
+                InternalUtils.writeMeta(format, lines, InternalUtils.Element.METHOD, mtd.getMetadata());
 
                 mtd.getParameters().stream().sorted((a,b) -> a.getIndex() - b.getIndex()).forEachOrdered(par -> {
                     lines.add(par.write(format, reversed));
-                    writeMeta(format, lines, PARAMETER, par.getMetadata());
+                    InternalUtils.writeMeta(format, lines, InternalUtils.Element.PARAMETER, par.getMetadata());
                 });
             });
         });

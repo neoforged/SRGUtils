@@ -1,19 +1,24 @@
+import net.neoforged.gradleutils.PomUtilsExtension.License
+
 plugins {
     id 'java'
     id 'eclipse'
     id 'maven-publish'
     id 'org.cadixdev.licenser' version '0.6.1'
-    id 'net.minecraftforge.gradleutils' version '2.+'
+    id 'net.neoforged.gradleutils' version '3.0.0-alpha.4'
     id 'com.github.ben-manes.versions' version '0.46.0'
 }
 
-group 'net.minecraftforge'
-version = gradleutils.getTagOffsetVersion()
+group 'net.neoforged'
+version = gradleutils.version
 println('Version: ' + version)
+
+java.withSourcesJar()
+java.withJavadocJar()
 
 repositories {
     mavenLocal()
-    maven { url = 'https://maven.minecraftforge.net/' }
+    maven { url = 'https://maven.neoforged.net/releases/' }
     mavenCentral()
 }
 
@@ -37,46 +42,33 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(8)
 }
 
+gradleutils {
+    setupSigning()
+    setupCentralPublishing()
+}
+
 changelog {
-    fromTag '0.4'
+    from '1.0'
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            gradleutils.sign(it)
+
             pom {
-                name = 'SRG Utils'
+                name = project.name
                 description = 'Library for managing java obfuscation mappings in various formats.'
-                url = 'https://github.com/MinecraftForge/SrgUtils'
-                scm {
-                    url = 'https://github.com/MinecraftForge/SrgUtils'
-                    connection = 'scm:git:git://github.com/MinecraftForge/SrgUtils.git'
-                    developerConnection = 'scm:git:git@github.com:MinecraftForge/SrgUtils.git'
-                }
-                issueManagement {
-                    system = 'github'
-                    url = 'https://github.com/MinecraftForge/SrgUtils/issues'
-                }
 
-                licenses {
-                    license {
-                        name = 'LGPLv2.1'
-                        url = 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'LexManos'
-                        name = 'LexManos'
-                    }
-                }
+                pomUtils.neoForgedDeveloper(it)
+                pomUtils.license(it, License.LGPL_v2)
+                pomUtils.githubRepo(it, 'SRGUtils')
             }
         }
     }
     repositories {
-        maven gradleutils.publishingForgeMaven
+        maven gradleutils.publishingMaven
     }
 }
 
@@ -92,4 +84,3 @@ dependencyUpdates.resolutionStrategy {
         }
     }
 }
-

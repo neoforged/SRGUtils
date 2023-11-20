@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.srgutils;
+package net.neoforged.srgutils;
 
-import net.minecraftforge.srgutils.IMappingFile.IClass;
-import net.minecraftforge.srgutils.IMappingFile.IField;
-import net.minecraftforge.srgutils.IMappingFile.IMethod;
-import net.minecraftforge.srgutils.IMappingFile.IPackage;
-import net.minecraftforge.srgutils.IMappingFile.IParameter;
+import net.neoforged.srgutils.IMappingFile.IClass;
+import net.neoforged.srgutils.IMappingFile.IField;
+import net.neoforged.srgutils.IMappingFile.IMethod;
+import net.neoforged.srgutils.IMappingFile.IPackage;
+import net.neoforged.srgutils.IMappingFile.IParameter;
 
 public interface IRenamer {
     default String rename(IPackage value) {

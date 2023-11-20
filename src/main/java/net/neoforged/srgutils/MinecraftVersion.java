@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.srgutils;
+package net.neoforged.srgutils;
 
 import java.util.Locale;
 

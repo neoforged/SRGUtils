@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-only
  */
 
-package net.minecraftforge.srgutils;
+package net.neoforged.srgutils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import net.minecraftforge.srgutils.IMappingFile.Format;
+import net.neoforged.srgutils.IMappingFile.Format;
 
 class InternalUtils {
     static IMappingFile load(InputStream in) throws IOException {
