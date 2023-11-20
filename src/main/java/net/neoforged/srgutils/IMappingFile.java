@@ -88,8 +88,8 @@ public interface IMappingFile {
      * Chains this mapping file with another.
      * Any extra mappings in the other file that is not used are discarded.
      * For example:
-     * A mapping file with A -> B chained with a mapping file B -> C
-     * will result in a chained file of A -> C.
+     * A mapping file with A → B chained with a mapping file B → C
+     * will result in a chained file of A → C.
      *
      * @param other the other mapping file to chain with
      * @return the resulting chained mapping file
