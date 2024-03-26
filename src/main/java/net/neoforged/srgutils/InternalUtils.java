@@ -53,8 +53,7 @@ class InternalUtils {
         } else if (firstLine.startsWith("tiny\t")) { // Tiny V2+
             return loadTinyV2(firstLine, reader).build();
         } else if (firstLine.startsWith("tsrg2 ")) { // TSRG v2, parameters, and multi-names
-            reader.reset();
-            return loadTSrg2(filter(collectLines(reader))).build();
+            return loadTSrg2(firstLine, reader).build();
         } else { // TSRG/CSRG
             reader.reset();
             return loadSlimSRG(filter(collectLines(reader))).build();
@@ -269,7 +268,7 @@ class InternalUtils {
         return ret;
     }
 
-    private static IMappingBuilder loadTSrg2(List<String> lines) throws IOException {
+    private static IMappingBuilder loadTSrg2(String headerLine, LineNumberReader reader) throws IOException {
         /*
          *   This is a extended spec of the TSRG format, mainly to allow multiple names
          * for entries, consolidating our files into a single one, parameter names, and
@@ -305,22 +304,24 @@ class InternalUtils {
          *   Line numbers:
          *     I can't see a use for this
          */
-        String[] header = lines.get(0).split(" ");
-        if (header.length < 3) throw new IOException("Invalid TSrg v2 Header: " + lines.get(0));
+        String[] header = headerLine.split(" ");
+        if (header.length < 3) throw new IOException("Invalid TSrg v2 Header: " + headerLine);
         IMappingBuilder ret = IMappingBuilder.create(Arrays.copyOfRange(header, 1, header.length));
         int nameCount = header.length - 1;
-        lines.remove(0);
 
         IMappingBuilder.IClass cls = null;
         IMappingBuilder.IMethod mtd = null;
-        for (String line : lines) {
+        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+            if (line.isEmpty() || stripComment(line).isEmpty())
+                continue;
+
             if (line.length() < 2)
-                throw new IOException("Invalid TSRG v2 line, too short: " + line);
+                throw new TSRG2ParseException("too short", line, reader.getLineNumber());
 
             String[] pts = line.split(" ");
             if (line.charAt(0) != '\t') { // Classes or Packages are not tabbed
                 if (pts.length != nameCount)
-                    throw new IOException("Invalid TSRG v2 line: " + line);
+                    throw new TSRG2ParseException("namespace count mismatch", line, reader.getLineNumber());
                 if (pts[0].charAt(pts[0].length() - 1) == '/') { // Packages
                     for (int x = 0; x < pts.length; x++)
                         pts[x] = pts[x].substring(0, pts[x].length() - 1);
@@ -331,7 +332,7 @@ class InternalUtils {
                 mtd = null;
             } else if (line.charAt(1) == '\t') {
                 if (mtd == null)
-                    throw new IOException("Invalid TSRG v2 line, missing method: " + line);
+                    throw new TSRG2ParseException("missing method", line, reader.getLineNumber());
                 pts[0] = pts[0].substring(2);
 
                 if (pts.length == 1 && pts[0].equals("static"))
@@ -339,10 +340,10 @@ class InternalUtils {
                 else if (pts.length == nameCount + 1) // Parameter
                     mtd.parameter(Integer.parseInt(pts[0]), Arrays.copyOfRange(pts, 1, pts.length));
                 else
-                    throw new IOException("Invalid TSRG v2 line, too many parts: " + line);
+                    throw new TSRG2ParseException("too many parts", line, reader.getLineNumber());
             } else {
                 if (cls == null)
-                    throw new IOException("Invalid TSRG v2 line, missing class: " + line);
+                    throw new TSRG2ParseException("missing class", line, reader.getLineNumber());
                 pts[0] = pts[0].substring(1);
 
                 if (pts.length == nameCount) // Field without descriptor
@@ -356,11 +357,17 @@ class InternalUtils {
                         cls.field(Arrays.copyOfRange(pts, 1, pts.length)).descriptor(pts[0]);
                     }
                 } else
-                    throw new IOException("Invalid TSRG v2 line, to many parts: " + line);
+                    throw new TSRG2ParseException("too many parts", line, reader.getLineNumber());
             }
         }
 
         return ret;
+    }
+
+    private static final class TSRG2ParseException extends IOException {
+        TSRG2ParseException(String reason, String line, int lineNum) {
+            super("Invalid TSRG v2 line (#" + lineNum + "), " + reason + ": " + line);
+        }
     }
 
     private static IMappingBuilder loadTinyV1(List<String> lines) throws IOException {
