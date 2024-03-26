@@ -46,7 +46,7 @@ class InternalUtils {
             return loadSRG(filter(collectLines(reader))).build();
         } else if(firstLine.contains(" -> ")) { // ProGuard
             reader.reset();
-            return loadProguard(filter(collectLines(reader))).build();
+            return loadProguard(reader).build();
         } else if (firstLine.startsWith("v1\t")) { // Tiny V1
             reader.reset();
             return loadTinyV1(collectLines(reader)).build();
@@ -151,11 +151,11 @@ class InternalUtils {
      *     10:15 boolean oldFunction(java.lang.Objeect,int[]) -> newFunction
      *
      */
-    private static IMappingBuilder loadProguard(List<String> lines) throws IOException {
+    private static IMappingBuilder loadProguard(LineNumberReader reader) throws IOException {
         IMappingBuilder ret = IMappingBuilder.create("left", "right");
 
         IMappingBuilder.IClass cls = null;
-        for (String line : lines) {
+        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
             line = line.replace('.', '/');
             if (!line.startsWith("    ") && line.endsWith(":")) {
                 String[] pts = line.replace('.', '/').split(" -> ");
