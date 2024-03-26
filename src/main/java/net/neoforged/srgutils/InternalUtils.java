@@ -164,7 +164,7 @@ class InternalUtils {
                 cls = ret.addClass(pts[0], pts[1].substring(0, pts[1].length() - 1));
             } else if (line.contains("(") && line.contains(")")) {
                 if (cls == null)
-                    throw new IOException("Invalid PG line, missing class: " + line);
+                    throw proguardException("missing class", line, reader.getLineNumber());
 
                 line = line.trim();
                 int start = 0;
@@ -194,13 +194,17 @@ class InternalUtils {
                 if (end   != 0) mtd.meta("end_line",   Integer.toString(end));
             } else {
                 if (cls == null)
-                    throw new IOException("Invalid PG line, missing class: " + line);
+                    throw proguardException("missing class", line, reader.getLineNumber());
                 String[] pts = line.trim().split(" ");
                 cls.field(pts[1], pts[3]).descriptor(toDesc(pts[0]));
             }
         }
 
         return ret;
+    }
+
+    private static IOException proguardException(String reason, String line, int lineNum) {
+        return new IOException("Invalid ProGuard line (#" + lineNum + "), " + reason + ": " + line);
     }
 
     /*
@@ -316,12 +320,12 @@ class InternalUtils {
                 continue;
 
             if (line.length() < 2)
-                throw new TSRG2ParseException("too short", line, reader.getLineNumber());
+                throw tSrg2Exception("too short", line, reader.getLineNumber());
 
             String[] pts = line.split(" ");
             if (line.charAt(0) != '\t') { // Classes or Packages are not tabbed
                 if (pts.length != nameCount)
-                    throw new TSRG2ParseException("namespace count mismatch", line, reader.getLineNumber());
+                    throw tSrg2Exception("namespace count mismatch", line, reader.getLineNumber());
                 if (pts[0].charAt(pts[0].length() - 1) == '/') { // Packages
                     for (int x = 0; x < pts.length; x++)
                         pts[x] = pts[x].substring(0, pts[x].length() - 1);
@@ -332,7 +336,7 @@ class InternalUtils {
                 mtd = null;
             } else if (line.charAt(1) == '\t') {
                 if (mtd == null)
-                    throw new TSRG2ParseException("missing method", line, reader.getLineNumber());
+                    throw tSrg2Exception("missing method", line, reader.getLineNumber());
                 pts[0] = pts[0].substring(2);
 
                 if (pts.length == 1 && pts[0].equals("static"))
@@ -340,10 +344,10 @@ class InternalUtils {
                 else if (pts.length == nameCount + 1) // Parameter
                     mtd.parameter(Integer.parseInt(pts[0]), Arrays.copyOfRange(pts, 1, pts.length));
                 else
-                    throw new TSRG2ParseException("too many parts", line, reader.getLineNumber());
+                    throw tSrg2Exception("too many parts", line, reader.getLineNumber());
             } else {
                 if (cls == null)
-                    throw new TSRG2ParseException("missing class", line, reader.getLineNumber());
+                    throw tSrg2Exception("missing class", line, reader.getLineNumber());
                 pts[0] = pts[0].substring(1);
 
                 if (pts.length == nameCount) // Field without descriptor
@@ -357,17 +361,15 @@ class InternalUtils {
                         cls.field(Arrays.copyOfRange(pts, 1, pts.length)).descriptor(pts[0]);
                     }
                 } else
-                    throw new TSRG2ParseException("too many parts", line, reader.getLineNumber());
+                    throw tSrg2Exception("too many parts", line, reader.getLineNumber());
             }
         }
 
         return ret;
     }
 
-    private static final class TSRG2ParseException extends IOException {
-        TSRG2ParseException(String reason, String line, int lineNum) {
-            super("Invalid TSRG v2 line (#" + lineNum + "), " + reason + ": " + line);
-        }
+    private static IOException tSrg2Exception(String reason, String line, int lineNum) {
+        return new IOException("Invalid TSRG v2 line (#" + lineNum + "), " + reason + ": " + line);
     }
 
     private static IMappingBuilder loadTinyV1(List<String> lines) throws IOException {
