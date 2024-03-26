@@ -5,18 +5,16 @@
 
 package net.neoforged.srgutils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.io.LineNumberReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,32 +28,43 @@ class InternalUtils {
     }
 
     static INamedMappingFile loadNamed(InputStream in) throws IOException {
-        List<String> lines = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)).lines()
-            //.map(InternalUtils::stripComment)
-            .filter(l -> !l.isEmpty()) //Remove Empty lines
-            .collect(Collectors.toList());
+        LineNumberReader reader = new LineNumberReader(new InputStreamReader(in));
+        reader.mark(2048);
 
-        if (lines.isEmpty())
-            return IMappingBuilder.create().build();
+        String firstLine;
+		do {
+			firstLine = reader.readLine();
+			if (firstLine == null) {
+				return IMappingBuilder.create().build();
+			}
+		} while (stripComment(firstLine).isEmpty());
 
-        String firstLine = lines.get(0);
-        Iterator<String> itr = lines.iterator();
-        while (stripComment(firstLine).isEmpty() && itr.hasNext())
-            firstLine = itr.next();
         String test = firstLine.split(" ")[0];
 
-        if ("PK:".equals(test) || "CL:".equals(test) || "FD:".equals(test) || "MD:".equals(test)) //SRG
-            return loadSRG(filter(lines)).build();
-        else if(firstLine.contains(" -> ")) // ProGuard
-            return loadProguard(filter(lines)).build();
-        else if (firstLine.startsWith("v1\t")) // Tiny V1
-            return loadTinyV1(lines).build();
-        else if (firstLine.startsWith("tiny\t")) // Tiny V2+
-            return loadTinyV2(lines).build();
-        else if (firstLine.startsWith("tsrg2 ")) // TSRG v2, parameters, and multi-names
-            return loadTSrg2(filter(lines)).build();
-        else // TSRG/CSRG
-            return loadSlimSRG(filter(lines)).build();
+        if ("PK:".equals(test) || "CL:".equals(test) || "FD:".equals(test) || "MD:".equals(test)) { //SRG
+            reader.reset();
+            return loadSRG(filter(collectLines(reader))).build();
+        } else if(firstLine.contains(" -> ")) { // ProGuard
+            reader.reset();
+            return loadProguard(filter(collectLines(reader))).build();
+        } else if (firstLine.startsWith("v1\t")) { // Tiny V1
+            reader.reset();
+            return loadTinyV1(collectLines(reader)).build();
+        } else if (firstLine.startsWith("tiny\t")) { // Tiny V2+
+            return loadTinyV2(firstLine, reader).build();
+        } else if (firstLine.startsWith("tsrg2 ")) { // TSRG v2, parameters, and multi-names
+            reader.reset();
+            return loadTSrg2(filter(collectLines(reader))).build();
+        } else { // TSRG/CSRG
+            reader.reset();
+            return loadSlimSRG(filter(collectLines(reader))).build();
+        }
+    }
+
+    private static List<String> collectLines(LineNumberReader reader) {
+        return reader.lines()
+                .filter(l -> !l.isEmpty()) //Remove Empty lines
+                .collect(Collectors.toList());
     }
 
     private static List<String> filter(List<String> lines) {
@@ -395,32 +404,34 @@ class InternalUtils {
         return ret;
     }
 
-    private static IMappingBuilder loadTinyV2(List<String> lines) throws IOException {
+    private static IMappingBuilder loadTinyV2(String headerLine, LineNumberReader reader) throws IOException {
         /*
          * This is the only spec I could find on it, so i'm assuming its official:
          * https://github.com/FabricMC/tiny-remapper/issues/9
          */
-        String[] header = lines.get(0).split("\t");
-        if (header.length < 5) throw new IOException("Invalid Tiny v2 Header: " + lines.get(0));
+        String[] header = headerLine.split("\t");
+        if (header.length < 5) throw new IOException("Invalid Tiny v2 Header: " + headerLine);
 
         try {
             int major = Integer.parseInt(header[1]);
             int minor = Integer.parseInt(header[2]);
             if (major != 2 || minor != 0)
-                throw new IOException("Unsupported Tiny v2 version: " + lines.get(0));
+                throw new IOException("Unsupported Tiny v2 version: " + headerLine);
         } catch (NumberFormatException e) {
-            throw new IOException("Invalid Tiny v2 Header: " + lines.get(0));
+            throw new IOException("Invalid Tiny v2 Header: " + headerLine);
         }
         IMappingBuilder ret = IMappingBuilder.create(Arrays.copyOfRange(header, 3, header.length));
 
         int nameCount = header.length - 3;
         boolean escaped = false;
         Map<String, String> properties = new HashMap<>();
-        int start = 1;
-        for(start = 1; start < lines.size(); start++) {
-            String[] line = lines.get(start).split("\t");
-            if (!line[0].isEmpty())
+        while (true) {
+            reader.mark(2048);
+            String[] line = reader.readLine().split("\t");
+            if (!line[0].isEmpty()) {
+				reader.reset();
                 break;
+			}
 
             properties.put(line[1], line.length < 3 ? null : escaped ? unescapeTinyString(line[2]) : line[2]);
             if ("escaped-names".equals(line[1]))
@@ -433,8 +444,11 @@ class InternalUtils {
         IMappingBuilder.IMethod method = null;
         IMappingBuilder.IParameter param = null;
 
-        for (int x = start; x < lines.size(); x++) {
-            String line = lines.get(x);
+        while (true) {
+            String line = reader.readLine();
+            if (line == null) {
+                break;
+            }
 
             int newdepth = 0;
             while (line.charAt(newdepth) == '\t')
@@ -464,7 +478,7 @@ class InternalUtils {
                 case "c":
                     if (stack.size() == 0) { // Class: c Name1 Name2 Name3
                         if (parts.length != nameCount + 1)
-                            throw tiny2Exception(x, line);
+                            throw tiny2Exception(reader.getLineNumber(), line);
 
                         cls = ret.addClass(Arrays.copyOfRange(parts, 1, parts.length));
                         stack.push(TinyV2State.CLASS);
@@ -472,29 +486,29 @@ class InternalUtils {
                         String comment = unescapeTinyString(parts[1]);
                         switch (stack.peek()) {
                             case CLASS:
-                                if (cls == null) throw tiny2Exception(x, line);
+                                if (cls == null) throw tiny2Exception(reader.getLineNumber(), line);
                                 cls.meta("comment", comment);
                                 break;
                             case FIELD:
-                                if (field == null) throw tiny2Exception(x, line);
+                                if (field == null) throw tiny2Exception(reader.getLineNumber(), line);
                                 field.meta("comment", comment);
                                 break;
                             case METHOD:
-                                if (method == null) throw tiny2Exception(x, line);
+                                if (method == null) throw tiny2Exception(reader.getLineNumber(), line);
                                 method.meta("comment", comment);
                                 break;
                             case PARAMETER:
-                                if (param == null) throw tiny2Exception(x, line);
+                                if (param == null) throw tiny2Exception(reader.getLineNumber(), line);
                                 param.meta("comment", comment);
                                 break;
                             default:
-                                throw tiny2Exception(x, line);
+                                throw tiny2Exception(reader.getLineNumber(), line);
                         }
                     }
                     break;
                 case "f": // Field: f desc Name1 Name2 Name3
                     if (parts.length != nameCount + 2 || stack.peek() != TinyV2State.CLASS)
-                        throw tiny2Exception(x, line);
+                        throw tiny2Exception(reader.getLineNumber(), line);
 
                     field = cls.field(Arrays.copyOfRange(parts, 2, parts.length)).descriptor(parts[1]);
                     stack.push(TinyV2State.FIELD);
@@ -503,7 +517,7 @@ class InternalUtils {
 
                 case "m": // Method: m desc Name1 Name2 Name3
                     if (parts.length != nameCount + 2 || stack.peek() != TinyV2State.CLASS)
-                        throw tiny2Exception(x, line);
+                        throw tiny2Exception(reader.getLineNumber(), line);
 
                     method = cls.method(parts[1], Arrays.copyOfRange(parts, 2, parts.length));
                     stack.push(TinyV2State.METHOD);
@@ -512,7 +526,7 @@ class InternalUtils {
 
                 case "p": // Parameters: p index Name1 Name2 Name3
                     if (parts.length != nameCount + 2 || stack.peek() != TinyV2State.METHOD)
-                        throw tiny2Exception(x, line);
+                        throw tiny2Exception(reader.getLineNumber(), line);
 
                     param = method.parameter(Integer.parseInt(parts[1]), Arrays.copyOfRange(parts, 2, parts.length));
                     stack.push(TinyV2State.PARAMETER);
@@ -521,7 +535,7 @@ class InternalUtils {
                 case "v": // Local Variable: v index start Name1 Name2 Name3?
                     break; //TODO: Unsupported, is this used? Should we expose it?
                 default:
-                    throw tiny2Exception(x, line);
+                    throw tiny2Exception(reader.getLineNumber(), line);
             }
         }
 
