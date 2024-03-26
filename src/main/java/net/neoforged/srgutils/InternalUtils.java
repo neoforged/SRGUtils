@@ -32,12 +32,12 @@ class InternalUtils {
         reader.mark(2048);
 
         String firstLine;
-		do {
-			firstLine = reader.readLine();
-			if (firstLine == null) {
-				return IMappingBuilder.create().build();
-			}
-		} while (stripComment(firstLine).isEmpty());
+        do {
+            firstLine = reader.readLine();
+            if (firstLine == null) {
+                return IMappingBuilder.create().build();
+            }
+        } while (stripComment(firstLine).isEmpty());
 
         String test = firstLine.split(" ")[0];
 
@@ -429,9 +429,9 @@ class InternalUtils {
             reader.mark(2048);
             String[] line = reader.readLine().split("\t");
             if (!line[0].isEmpty()) {
-				reader.reset();
+                reader.reset();
                 break;
-			}
+            }
 
             properties.put(line[1], line.length < 3 ? null : escaped ? unescapeTinyString(line[2]) : line[2]);
             if ("escaped-names".equals(line[1]))
