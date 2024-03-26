@@ -156,6 +156,9 @@ class InternalUtils {
 
         IMappingBuilder.IClass cls = null;
         for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+            if (line.isEmpty() || stripComment(line).isEmpty()) {
+                continue;
+            }
             line = line.replace('.', '/');
             if (!line.startsWith("    ") && line.endsWith(":")) {
                 String[] pts = line.replace('.', '/').split(" -> ");
