@@ -110,6 +110,10 @@ public class MappingTest {
         IMappingFile map = INamedMappingFile.load(getStream("./tsrg2.tsrg")).getMap("a", "b");
         IMappingFile.IClass aaeaa = map.getClass("aae$a$a");
         assertEquals("net/test/src/C_5218_", aaeaa.getMapped());
+        assertEquals("deserialize", aaeaa.getMethod(
+                "a",
+                "(Lcom/google/gson/JsonElement;Ljava/lang/reflect/Type;Lcom/google/gson/JsonDeserializationContext;)Laae$a;"
+		).getMapped());
     }
 
     @Test
@@ -117,5 +121,9 @@ public class MappingTest {
         IMappingFile map = INamedMappingFile.load(getStream("./tiny_v1.tiny")).getMap("a", "b");
         IMappingFile.IClass aaeaa = map.getClass("a");
         assertEquals("net/test/class_4581", aaeaa.getMapped());
+        assertEquals("method_22848", aaeaa.getMethod(
+                "a",
+                "(FF)Lcom/mojang/datafixers/util/Pair;"
+		).getMapped());
     }
 }
