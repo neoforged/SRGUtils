@@ -48,7 +48,6 @@ class InternalUtils {
             reader.reset();
             return loadProguard(reader).build();
         } else if (firstLine.startsWith("v1\t")) { // Tiny V1
-            reader.reset();
             return loadTinyV1(firstLine, reader).build();
         } else if (firstLine.startsWith("tiny\t")) { // Tiny V2+
             return loadTinyV2(firstLine, reader).build();
