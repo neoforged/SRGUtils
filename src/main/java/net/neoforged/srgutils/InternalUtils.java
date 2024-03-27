@@ -43,13 +43,13 @@ class InternalUtils {
 
         if ("PK:".equals(test) || "CL:".equals(test) || "FD:".equals(test) || "MD:".equals(test)) { //SRG
             reader.reset();
-            return loadSRG(filter(collectLines(reader))).build();
+            return loadSRG(reader).build();
         } else if(firstLine.contains(" -> ")) { // ProGuard
             reader.reset();
             return loadProguard(reader).build();
         } else if (firstLine.startsWith("v1\t")) { // Tiny V1
             reader.reset();
-            return loadTinyV1(collectLines(reader)).build();
+            return loadTinyV1(firstLine, reader).build();
         } else if (firstLine.startsWith("tiny\t")) { // Tiny V2+
             return loadTinyV2(firstLine, reader).build();
         } else if (firstLine.startsWith("tsrg2 ")) { // TSRG v2, parameters, and multi-names
@@ -92,10 +92,13 @@ class InternalUtils {
      * FD: OriginalClass/OriginalField OriginalDeesc NewClass/NewField  NewDesc
      *
      */
-    private static IMappingBuilder loadSRG(List<String> lines) throws IOException {
+    private static IMappingBuilder loadSRG(LineNumberReader reader) throws IOException {
         IMappingBuilder ret = IMappingBuilder.create("left", "right");
         Map<String, IMappingBuilder.IClass> classes = new HashMap<>();
-        for (String line : lines) {
+        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+            if (isEmptyOrCommentLine(line)) {
+                continue;
+            }
             String[] pts = line.split(" ");
             switch (pts[0]) {
                 case "PK:": ret.addPackage(pts[1], pts[2]); break;
@@ -155,7 +158,7 @@ class InternalUtils {
 
         IMappingBuilder.IClass cls = null;
         for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-            if (line.isEmpty() || stripComment(line).isEmpty()) {
+            if (isEmptyOrCommentLine(line)) {
                 continue;
             }
             line = line.replace('.', '/');
@@ -316,7 +319,7 @@ class InternalUtils {
         IMappingBuilder.IClass cls = null;
         IMappingBuilder.IMethod mtd = null;
         for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-            if (line.isEmpty() || stripComment(line).isEmpty())
+            if (isEmptyOrCommentLine(line))
                 continue;
 
             if (line.length() < 2)
@@ -368,48 +371,52 @@ class InternalUtils {
         return ret;
     }
 
+    private static boolean isEmptyOrCommentLine(String line) {
+        return line.isEmpty() || stripComment(line).isEmpty();
+    }
+
     private static IOException tSrg2Exception(String reason, String line, int lineNum) {
         return new IOException("Invalid TSRG v2 line (#" + lineNum + "), " + reason + ": " + line);
     }
 
-    private static IMappingBuilder loadTinyV1(List<String> lines) throws IOException {
+    private static IMappingBuilder loadTinyV1(String headerLine, LineNumberReader reader) throws IOException {
         /*
          *  The entire file is just a list tab-separated-value lines.
          *  It can have a unlimited number of name steps, The first part of the header is always 'v1'
          *  anything extra tells us the names of mapping stages. So we build a bunch of maps from the first value to the Nth value
          */
-        String[] header = lines.get(0).split("\t");
-        if (header.length < 3) throw new IOException("Invalid Tiny v1 Header: " + lines.get(0));
+        String[] header = headerLine.split("\t");
+        if (header.length < 3) throw new IOException("Invalid Tiny v1 Header: " + headerLine);
         IMappingBuilder ret = IMappingBuilder.create(Arrays.copyOfRange(header, 1, header.length));
         Map<String, IMappingBuilder.IClass> classes = new HashMap<>();
         int nameCount = header.length - 1;
 
-        for (int x = 1; x < lines.size(); x++) {
-            String[] line = lines.get(x).split("\t");
-            if (line[0].startsWith("#")) { // Comment
+        for (String read = reader.readLine(); read != null; read = reader.readLine()) {
+            if (isEmptyOrCommentLine(read)) {
                 continue;
             }
+            String[] line = read.split("\t");
             switch (line[0]) {
                 case "CLASS": // CLASS Name1 Name2 Name3...
                     if (line.length != nameCount + 1)
-                        throw new IOException("Invalid Tiny v1 line: #" + x + ": " + line);
+                        throw new IOException("Invalid Tiny v1 line: #" + reader.getLineNumber() + ": " + read);
                     classes.put(line[1], ret.addClass(Arrays.copyOfRange(line, 1, line.length)));
                     break;
                 case "FIELD": // FIELD Owner Desc Name1 Name2 Name3
                     if (line.length != nameCount + 3)
-                        throw new IOException("Invalid Tiny v1 line: #" + x + ": " + line);
+                        throw new IOException("Invalid Tiny v1 line: #" + reader.getLineNumber() + ": " + read);
                     classes.computeIfAbsent(line[1], k -> ret.addClass(duplicate(k, nameCount)))
                         .field(Arrays.copyOfRange(line, 3, line.length))
                         .descriptor(line[2]);
                     break;
                 case "METHOD": // METHOD Owner Desc Name1 Name2 Name3
                     if (line.length != nameCount + 3)
-                        throw new IOException("Invalid Tiny v1 line: #" + x + ": " + line);
+                        throw new IOException("Invalid Tiny v1 line: #" + reader.getLineNumber() + ": " + read);
                     classes.computeIfAbsent(line[1], k -> ret.addClass(duplicate(k, nameCount)))
                         .method(line[2], Arrays.copyOfRange(line, 3, line.length));
                     break;
                 default:
-                    throw new IOException("Invalid Tiny v1 line: #" + x + ": " + line);
+                    throw new IOException("Invalid Tiny v1 line: #" + reader.getLineNumber() + ": " + read);
             }
         }
 
