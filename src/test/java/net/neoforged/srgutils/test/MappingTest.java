@@ -117,6 +117,13 @@ public class MappingTest {
 	}
 
 	@Test
+	void tsrg2ExceptionLineNumber() {
+		IOException ioException = assertThrows(IOException.class, () ->
+				INamedMappingFile.load(getStream("./tsrg2_invalid.tsrg")));
+		assertTrue(ioException.getMessage().startsWith("Invalid TSRG v2 line (#4)"));
+	}
+
+	@Test
 	void tinyV1() throws IOException {
 		IMappingFile map = INamedMappingFile.load(getStream("./tiny_v1.tiny")).getMap("a", "b");
 		IMappingFile.IClass aaeaa = map.getClass("a");
