@@ -104,4 +104,18 @@ public class MappingTest {
                 "\tc\tbaz"
         ), Files.readAllLines(output));
     }
+
+    @Test
+    void tsrg2() throws IOException {
+        IMappingFile map = INamedMappingFile.load(getStream("./tsrg2.tsrg")).getMap("a", "b");
+        IMappingFile.IClass aaeaa = map.getClass("aae$a$a");
+        assertEquals("net/test/src/C_5218_", aaeaa.getMapped());
+    }
+
+    @Test
+    void tinyV1() throws IOException {
+        IMappingFile map = INamedMappingFile.load(getStream("./tiny_v1.tiny")).getMap("a", "b");
+        IMappingFile.IClass aaeaa = map.getClass("a");
+        assertEquals("net/test/class_4581", aaeaa.getMapped());
+    }
 }

@@ -1,0 +1,19 @@
+tsrg2 a b id
+a net/test/src/C_140945_ 140945
+	a f_142767_ 142767
+	b f_142768_ 142768
+	<init> ()V <init> 142771
+aad net/test/src/C_5215_ 5215
+	a f_134885_ 134885
+	<clinit> ()V <clinit> 134887
+		static
+	<init> (Lqx;)V <init> 179833
+		0 o p_179834_ 179834
+	a (Lqx;)V m_5779_ 134898
+		0 o p_134899_ 134899
+aae$a$a net/test/src/C_5218_ 5218
+	<init> ()V <init> 134928
+	a (Lcom/google/gson/JsonElement;Ljava/lang/reflect/Type;Lcom/google/gson/JsonDeserializationContext;)Laae$a; deserialize 134929
+		0 o p_134930_ 134930
+		1 o p_134931_ 134931
+		2 o p_134932_ 134932

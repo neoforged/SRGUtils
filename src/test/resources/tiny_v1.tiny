@@ -1,0 +1,22 @@
+v1	a	b
+CLASS	a	net/test/class_4581
+FIELD	a	F	a	field_21633
+FIELD	a	F	b	field_21634
+METHOD	a	()V	a	method_22847
+METHOD	a	(F)V	a	method_23729
+METHOD	a	(FF)Lcom/mojang/datafixers/util/Pair;	a	method_22848
+METHOD	a	(FFF)Lcom/mojang/datafixers/util/Pair;	a	method_22849
+METHOD	a	(IIF)V	a	method_26288
+METHOD	a	(La;)V	a	method_22852
+METHOD	a	(Ld;)V	a	method_23274
+METHOD	a	()Lorg/apache/commons/lang3/tuple/Triple;	b	method_22853
+METHOD	a	(FFF)La;	b	method_23963
+METHOD	a	(La;)V	b	method_22855
+METHOD	a	()V	c	method_22856
+METHOD	a	(La;)Ld;	c	method_22857
+METHOD	a	()La;	d	method_23296
+METHOD	a	()F	e	method_23731
+METHOD	a	(Ljava/lang/Object;)Z	equals	equals
+METHOD	a	()Z	f	method_23732
+METHOD	a	()I	hashCode	hashCode
+METHOD	a	()Ljava/lang/String;	toString	toString
