@@ -29,10 +29,10 @@ class InternalUtils {
 
     static INamedMappingFile loadNamed(InputStream in) throws IOException {
         LineNumberReader reader = new LineNumberReader(new InputStreamReader(in));
-        reader.mark(2048);
 
         String firstLine;
         do {
+            reader.mark(2048);
             firstLine = reader.readLine();
             if (firstLine == null) {
                 return IMappingBuilder.create().build();
