@@ -92,7 +92,7 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
         String preA = Character.toString((char)('a' - 1));
 
         if ("15w14a".equals(lower))                    // 2015 April Fools
-            return new MinecraftVersion(Type.APRIL_FOOLS, version, 14, 15, 0, "a", splitDots("1.10"));
+            return new MinecraftVersion(Type.APRIL_FOOLS, version, 14, 15, 0, "a", splitDots("1.8.3"));
         else if ("1.rv-pre1".equals(lower))            // 2016 April Fools
             return new MinecraftVersion(Type.APRIL_FOOLS, version, 14, 16, 0, preA, splitDots("1.9.3"));
         else if ("3d shareware v1.34".equals(lower))   // 2019 April Fools
