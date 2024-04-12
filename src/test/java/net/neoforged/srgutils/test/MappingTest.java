@@ -7,13 +7,18 @@ package net.neoforged.srgutils.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
+import net.neoforged.srgutils.IMappingBuilder;
 import org.junit.jupiter.api.Test;
 
 import net.neoforged.srgutils.IMappingFile;
 import net.neoforged.srgutils.IMappingFile.Format;
 import net.neoforged.srgutils.INamedMappingFile;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,5 +87,21 @@ public class MappingTest {
         IMappingFile.IParameter par = mtd.getParameters().iterator().next();
         assertNotNull(par, "Missing Parameter");
         assertEquals("Param Comment", par.getMetadata().get("comment"));
+    }
+
+    @Test
+    void tinyV2_packages_meta_are_not_written(@TempDir Path tempDir) throws IOException {
+        IMappingBuilder builder = IMappingBuilder.create("left", "right");
+        builder.addPackage("test/a", "test/b").meta("comment", "foo");
+        builder.addPackage("test/c", "test/d").meta("comment", "bar");
+        builder.addClass("test/a/Baz", "test/b/Baz").meta("comment", "baz");
+
+        Path output = tempDir.resolve("output.tiny");
+        builder.build().write(output, Format.TINY);
+        assertLinesMatch(Arrays.asList(
+                "tiny\t2\t0\tleft\tright",
+                "c\ttest/a/Baz\ttest/b/Baz",
+                "\tc\tbaz"
+        ), Files.readAllLines(output));
     }
 }

@@ -78,25 +78,35 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
         Comparator<Named> sort = (a,b) -> a.getName(indexes[0]).compareTo(b.getName(indexes[0]));
 
         getPackages().sorted(sort).forEachOrdered(pkg -> {
-            lines.add(pkg.write(format, indexes));
-            InternalUtils.writeMeta(format, lines, InternalUtils.Element.PACKAGE, pkg.meta);
+            String pkgLine = pkg.write(format, indexes);
+            lines.add(pkgLine);
+            if (pkgLine != null)
+                InternalUtils.writeMeta(format, lines, InternalUtils.Element.PACKAGE, pkg.meta);
         });
         getClasses().sorted(sort).forEachOrdered(cls -> {
-            lines.add(cls.write(format, indexes));
-            InternalUtils.writeMeta(format, lines, InternalUtils.Element.CLASS, cls.meta);
+            String clsLine = cls.write(format, indexes);
+            lines.add(clsLine);
+            if (clsLine != null)
+                InternalUtils.writeMeta(format, lines, InternalUtils.Element.CLASS, cls.meta);
 
             cls.getFields().sorted(sort).forEachOrdered(fld -> {
-                lines.add(fld.write(format, indexes));
-                InternalUtils.writeMeta(format, lines, InternalUtils.Element.FIELD, fld.meta);
+                String fldLine = fld.write(format, indexes); 
+                lines.add(fldLine);
+                if (fldLine != null)
+                    InternalUtils.writeMeta(format, lines, InternalUtils.Element.FIELD, fld.meta);
             });
 
             cls.getMethods().sorted(sort).forEachOrdered(mtd -> {
-                lines.add(mtd.write(format, indexes));
-                InternalUtils.writeMeta(format, lines, InternalUtils.Element.METHOD, mtd.meta);
+                String mtdLine = mtd.write(format, indexes);
+                lines.add(mtdLine);
+                if (mtdLine != null)
+                    InternalUtils.writeMeta(format, lines, InternalUtils.Element.METHOD, mtd.meta);
 
                 mtd.getParameters().sorted((a,b) -> a.getIndex() - b.getIndex()).forEachOrdered(par -> {
-                    lines.add(par.write(format, indexes));
-                    InternalUtils.writeMeta(format, lines, InternalUtils.Element.PARAMETER, par.meta);
+                    String parLine = par.write(format, indexes);
+                    lines.add(parLine);
+                    if (parLine != null)
+                        InternalUtils.writeMeta(format, lines, InternalUtils.Element.PARAMETER, par.meta);
                 });
             });
         });
