@@ -253,7 +253,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
         private String getTsrg2(int... order) {
             StringBuilder ret = new StringBuilder();
             for (int x = 0; x < order.length; x++) {
-                ret.append(getName(x)).append('/');
+                ret.append(getName(order[x])).append('/');
                 if (x != order.length - 1)
                     ret.append(' ');
             }
@@ -330,7 +330,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
         private String getTsrg2(int... order) {
             StringBuilder ret = new StringBuilder();
             for (int x = 0; x < order.length; x++) {
-                ret.append(getName(x));
+                ret.append(getName(order[x]));
                 if (x != order.length - 1)
                     ret.append(' ');
             }
@@ -385,7 +385,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
             private String getTsrg2(int... order) {
                 StringBuilder ret = new StringBuilder().append('\t');
                 for (int x = 0; x < order.length; x++) {
-                    ret.append(getName(x));
+                    ret.append(getName(order[x]));
                     if (x == 0 && getDescriptor(order[x]) != null)
                         ret.append(' ').append(getDescriptor(order[x]));
                     if (x != order.length - 1)
@@ -456,7 +456,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
             private String getTsrg2(int... order) {
                 StringBuilder ret = new StringBuilder().append('\t');
                 for (int x = 0; x < order.length; x++) {
-                    ret.append(getName(x));
+                    ret.append(getName(order[x]));
                     if (x == 0 && getDescriptor(order[x]) != null)
                         ret.append(' ').append(getDescriptor(order[x]));
                     if (x != order.length - 1)
@@ -497,7 +497,7 @@ class NamedMappingFile implements INamedMappingFile, IMappingBuilder {
                     StringBuilder ret = new StringBuilder()
                         .append("\t\t").append(getIndex());
                     for (int x = 0; x < order.length; x++)
-                        ret.append(' ').append(getName(x));
+                        ret.append(' ').append(getName(order[x]));
                     return ret.toString();
                 }
 
