@@ -104,7 +104,7 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
         else if ("23w13a_or_b".equals(lower))          // 2023 April Fools
             return new MinecraftVersion(Type.APRIL_FOOLS, version, 13, 23, 0, "b", splitDots("1.20"));
         else if ("24w14potato".equals(lower))          // 2024 April Fools
-            return new MinecraftVersion(Type.APRIL_FOOLS, version, 14, 24, 0, preA, splitDots("1.21"));
+            return new MinecraftVersion(Type.APRIL_FOOLS, version, 14, 24, 0, preA, splitDots("1.20.5"));
         else if ("inf-20100618".equals(lower))
             return new MinecraftVersion(Type.ALPHA, version, 25, 10, 0, "a", splitDots("1.0.4"));
         else if ("c0.0.13a_03".equals(lower))          // Rather than screw with the logic of the alpha/beta parser, special case this weird one
