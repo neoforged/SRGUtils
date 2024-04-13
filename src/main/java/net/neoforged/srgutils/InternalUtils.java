@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ class InternalUtils {
     }
 
     static INamedMappingFile loadNamed(InputStream in) throws IOException {
-        LineNumberReader reader = new LineNumberReader(new InputStreamReader(in));
+        LineNumberReader reader = new LineNumberReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
         String firstLine;
         do {
