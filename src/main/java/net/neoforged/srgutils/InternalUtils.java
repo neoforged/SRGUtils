@@ -32,7 +32,6 @@ class InternalUtils {
 
         String firstLine;
         do {
-            reader.mark(2048);
             firstLine = reader.readLine();
             if (firstLine == null) {
                 return IMappingBuilder.create().build();
@@ -42,11 +41,9 @@ class InternalUtils {
         String test = firstLine.split(" ")[0];
 
         if ("PK:".equals(test) || "CL:".equals(test) || "FD:".equals(test) || "MD:".equals(test)) { //SRG
-            reader.reset();
-            return loadSRG(reader).build();
+            return loadSRG(firstLine, reader).build();
         } else if(firstLine.contains(" -> ")) { // ProGuard
-            reader.reset();
-            return loadProguard(reader).build();
+            return loadProguard(firstLine, reader).build();
         } else if (firstLine.startsWith("v1\t")) { // Tiny V1
             return loadTinyV1(firstLine, reader).build();
         } else if (firstLine.startsWith("tiny\t")) { // Tiny V2+
@@ -54,8 +51,9 @@ class InternalUtils {
         } else if (firstLine.startsWith("tsrg2 ")) { // TSRG v2, parameters, and multi-names
             return loadTSrg2(firstLine, reader).build();
         } else { // TSRG/CSRG
-            reader.reset();
-            return loadSlimSRG(filter(collectLines(reader))).build();
+            final List<String> list = new ArrayList<>(Collections.singletonList(firstLine));
+            list.addAll(filter(collectLines(reader)));
+            return loadSlimSRG(list).build();
         }
     }
 
@@ -91,11 +89,13 @@ class InternalUtils {
      * FD: OriginalClass/OriginalField OriginalDeesc NewClass/NewField  NewDesc
      *
      */
-    private static IMappingBuilder loadSRG(LineNumberReader reader) throws IOException {
+    private static IMappingBuilder loadSRG(String firstContentLine, LineNumberReader reader) throws IOException {
         IMappingBuilder ret = IMappingBuilder.create("left", "right");
         Map<String, IMappingBuilder.IClass> classes = new HashMap<>();
-        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+        String line = firstContentLine;
+        while (line != null) {
             if (isEmptyOrCommentLine(line)) {
+                line = reader.readLine();
                 continue;
             }
             String[] pts = line.split(" ");
@@ -121,6 +121,7 @@ class InternalUtils {
                 default:
                     throw new IOException("Invalid SRG file, Unknown type: " + line);
             }
+            line = reader.readLine();
         }
         return ret;
     }
@@ -152,12 +153,14 @@ class InternalUtils {
      *     10:15 boolean oldFunction(java.lang.Objeect,int[]) -> newFunction
      *
      */
-    private static IMappingBuilder loadProguard(LineNumberReader reader) throws IOException {
+    private static IMappingBuilder loadProguard(String firstContentLine, LineNumberReader reader) throws IOException {
         IMappingBuilder ret = IMappingBuilder.create("left", "right");
 
         IMappingBuilder.IClass cls = null;
-        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+        String line = firstContentLine;
+        while (line != null) {
             if (isEmptyOrCommentLine(line)) {
+                line = reader.readLine();
                 continue;
             }
             line = line.replace('.', '/');
@@ -200,6 +203,7 @@ class InternalUtils {
                 String[] pts = line.trim().split(" ");
                 cls.field(pts[1], pts[3]).descriptor(toDesc(pts[0]));
             }
+            line = reader.readLine();
         }
 
         return ret;
@@ -443,19 +447,7 @@ class InternalUtils {
         int nameCount = header.length - 3;
         boolean escaped = false;
         Map<String, String> properties = new HashMap<>();
-        while (true) {
-            reader.mark(2048);
-            String[] line = reader.readLine().split("\t");
-            if (!line[0].isEmpty()) {
-                reader.reset();
-                break;
-            }
-
-            properties.put(line[1], line.length < 3 ? null : escaped ? unescapeTinyString(line[2]) : line[2]);
-            if ("escaped-names".equals(line[1]))
-                escaped = true;
-        }
-
+        boolean doneReadingProperties = false;
         Deque<TinyV2State> stack = new ArrayDeque<>();
         IMappingBuilder.IClass cls = null;
         IMappingBuilder.IField field = null;
@@ -466,6 +458,18 @@ class InternalUtils {
             String line = reader.readLine();
             if (line == null) {
                 break;
+            }
+
+            if (!doneReadingProperties) {
+                String[] splitLine = line.split("\t");
+				if (splitLine[0].isEmpty()) {
+					properties.put(splitLine[1], splitLine.length < 3 ? null : escaped ? unescapeTinyString(splitLine[2]) : splitLine[2]);
+					if ("escaped-names".equals(splitLine[1]))
+						escaped = true;
+				    continue;
+				} else {
+					doneReadingProperties = true;
+				}
             }
 
             int newdepth = 0;
