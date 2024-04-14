@@ -104,4 +104,33 @@ public class MappingTest {
                 "\tc\tbaz"
         ), Files.readAllLines(output));
     }
+
+	@Test
+	void tsrg2() throws IOException {
+		IMappingFile map = INamedMappingFile.load(getStream("./tsrg2.tsrg")).getMap("a", "b");
+		IMappingFile.IClass aaeaa = map.getClass("aae$a$a");
+		assertEquals("net/test/src/C_5218_", aaeaa.getMapped());
+		assertEquals("deserialize", aaeaa.getMethod(
+				"a",
+				"(Lcom/google/gson/JsonElement;Ljava/lang/reflect/Type;Lcom/google/gson/JsonDeserializationContext;)Laae$a;"
+		).getMapped());
+	}
+
+	@Test
+	void tsrg2ExceptionLineNumber() {
+		IOException ioException = assertThrows(IOException.class, () ->
+				INamedMappingFile.load(getStream("./tsrg2_invalid.tsrg")));
+		assertTrue(ioException.getMessage().startsWith("Invalid TSRG v2 line (#4)"));
+	}
+
+	@Test
+	void tinyV1() throws IOException {
+		IMappingFile map = INamedMappingFile.load(getStream("./tiny_v1.tiny")).getMap("a", "b");
+		IMappingFile.IClass aaeaa = map.getClass("a");
+		assertEquals("net/test/class_4581", aaeaa.getMapped());
+		assertEquals("method_22848", aaeaa.getMethod(
+				"a",
+				"(FF)Lcom/mojang/datafixers/util/Pair;"
+		).getMapped());
+	}
 }
