@@ -60,7 +60,10 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
         if (value >= 2418 && value <= 2421) return "1.21";
         if (value >= 2433 && value <= 2440) return "1.21.2";
         if (value >= 2444 && value <= 2446) return "1.21.4";
-        if (value >= 2502 && value <= 9999) return "1.21.5";
+        if (value >= 2502 && value <= 2510) return "1.21.5";
+        if (value >= 2515 && value <= 2521) return "1.21.6";
+        if (value >= 2531 && value <= 2537) return "1.21.9";
+        if (value >= 2541 && value <= 9999) return "1.21.11";
         throw new IllegalArgumentException("Invalid snapshot date: " + value);
     }
 
@@ -143,6 +146,11 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
             int week = Integer.parseInt(version.substring(3, 5));
 
             return new MinecraftVersion(Type.SNAPSHOT, version, week, year, 0, version.substring(5), splitDots(fromSnapshot(year, week)));
+        } else if (version.length() == 19 && version.charAt(2) == 'w' && version.endsWith("unobfuscated")) {
+            int year = Integer.parseInt(version.substring(0, 2));
+            int week = Integer.parseInt(version.substring(3, 5));
+
+            return new MinecraftVersion(Type.UNOBFUSCATED, version, week, year, 0, version.substring(5), splitDots(fromSnapshot(year, week)));
         } else {
             int pre = 0;
             String nearest = version;
@@ -200,12 +208,14 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
                 case BETA:  return o.type == Type.ALPHA ? 1 : -1;
                 case SNAPSHOT:
                 case APRIL_FOOLS:
+                case UNOBFUSCATED:
                     ret = compareFull(o);
                     return ret == 0 ? -1 : ret;
                 case RELEASE:
                     switch (o.type) {
                         case ALPHA:
                         case BETA: return 1;
+                        case UNOBFUSCATED:
                         case SNAPSHOT:
                         case APRIL_FOOLS:
                         case RELEASE:
@@ -224,10 +234,12 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
                 if (this.revision != null && o.revision == null) return -1;
                 return this.revision.compareTo(o.revision);
 
+            case UNOBFUSCATED:
             case SNAPSHOT:
             case APRIL_FOOLS:
                 if (this.year != o.year) return this.year - o.year;
                 if (this.week != o.week) return this.week - o.week;
+                if ((this.type == Type.UNOBFUSCATED) != (o.type == Type.UNOBFUSCATED)) return this.type == Type.UNOBFUSCATED ? -1 : 1;
                 return this.revision.compareTo(o.revision);
 
             case RELEASE:
@@ -264,7 +276,8 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
         ALPHA,
 
         // Special Version Types
-        APRIL_FOOLS(true);
+        APRIL_FOOLS(true),
+        UNOBFUSCATED(true);
 
         private final boolean special;
 
@@ -284,8 +297,8 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
             if (this == other)
                 return true;
 
-            boolean thisSnapshot = this == APRIL_FOOLS || this == SNAPSHOT;
-            boolean otherSnapshot = other == APRIL_FOOLS || other == SNAPSHOT;
+            boolean thisSnapshot = this == APRIL_FOOLS || this == SNAPSHOT || this == UNOBFUSCATED;
+            boolean otherSnapshot = other == APRIL_FOOLS || other == SNAPSHOT || other == UNOBFUSCATED;
             return thisSnapshot && otherSnapshot;
         }
     }
