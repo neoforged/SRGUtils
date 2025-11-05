@@ -146,7 +146,7 @@ public class MinecraftVersion implements Comparable<MinecraftVersion> {
             int week = Integer.parseInt(version.substring(3, 5));
 
             return new MinecraftVersion(Type.SNAPSHOT, version, week, year, 0, version.substring(5), splitDots(fromSnapshot(year, week)));
-        } else if (version.length() == 19 && version.charAt(2) == 'w' && version.endsWith("unobfuscated")) {
+        } else if (version.length() == 19 && version.charAt(2) == 'w' && version.endsWith("_unobfuscated")) {
             int year = Integer.parseInt(version.substring(0, 2));
             int week = Integer.parseInt(version.substring(3, 5));
 
